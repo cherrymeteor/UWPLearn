@@ -26,5 +26,25 @@ namespace SoundBoard
         {
             this.InitializeComponent();
         }
+
+        private void humbergerButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void backButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void munueItemsListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
+        }
+
+        private void soundGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
+        }
     }
 }
