@@ -6,24 +6,27 @@ using System.Threading.Tasks;
 
 namespace SoundBoard.Model
 {
-    class Sound
+    public class Sound
     {
-        private string name;
-        private SoundCategory category;
-        private string audioFile;
-        private string imageFile;
+        public string Name { get ; set ; }
+        public SoundCategory Category { get; set; }
+        public string AudioFile { get; set; }
+        public string ImageFile { get; set; }
 
-        public string Name { get => name; set => name = value; }
-        public SoundCategory Category { get => category; set => category = value; }
-        public string AudioFile { get => audioFile; set => audioFile = value; }
-        public string ImageFile { get => imageFile; set => imageFile = value; }
-
-        public Sound(string name)
+        public Sound(string name, SoundCategory soundCategory)
         {
+            Name = name;
+            Category = soundCategory;
+            AudioFile = string.Format("/assets/Audio/{1}/{0}.wav", name, soundCategory);
+            ImageFile = string.Format("/assets/Images/{1}/{0}.png", name, soundCategory);
         }
     }
 
-    public class SoundCategory
+    public enum SoundCategory
     {
+        Animals,
+        Cartoons,
+        Taunts,
+        Warnings
     }
 }

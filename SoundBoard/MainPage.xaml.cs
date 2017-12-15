@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SoundBoard.Model;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,29 +24,62 @@ namespace SoundBoard
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        private ObservableCollection<Sound> Sounds;
+        private List<MenuItem> MenuItems;
+
         public MainPage()
         {
             this.InitializeComponent();
+            Sounds = new ObservableCollection<Sound>();
+            MenuItems = new List<MenuItem>();
+
+            SoundManager.GetAllSounds(Sounds);
+            backButton.Visibility = Visibility.Collapsed;
+
+            MenuItems.Add(new MenuItem { IconFile = "Assets/Icons/animals.png", Category = SoundCategory.Animals });
+            MenuItems.Add(new MenuItem { IconFile = "Assets/Icons/cartoon.png", Category = SoundCategory.Cartoons });
+            MenuItems.Add(new MenuItem { IconFile = "Assets/Icons/taunt.png", Category = SoundCategory.Taunts });
+            MenuItems.Add(new MenuItem { IconFile = "Assets/Icons/warning.png", Category = SoundCategory.Warnings });
         }
 
-        private void humbergerButton_Click(object sender, RoutedEventArgs e)
+        private void HumbergerButton_Click(object sender, RoutedEventArgs e)
+        {
+            splitView.IsPaneOpen = !splitView.IsPaneOpen;
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            SoundManager.GetAllSounds(Sounds);
+            CategoryTextBlock.Text = "All Sounds";
+            MenuItemsListView.SelectedItem = null;
+            backButton.Visibility = Visibility.Collapsed;
+        }
+
+        private void SoundGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var sound = (Sound)e.ClickedItem;
+            mediaPlayer.Source = new Uri(this.BaseUri, sound.AudioFile);
+        }
+
+        private void SearchAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
 
         }
 
-        private void backButton_Click(object sender, RoutedEventArgs e)
+        private void SearchAutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
 
         }
-
-        private void munueItemsListView_ItemClick(object sender, ItemClickEventArgs e)
+        
+        private void MenuItemsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            var menuItem = (MenuItem)e.ClickedItem;
+            CategoryTextBlock.Text = menuItem.Category.ToString();
 
-        }
+            SoundManager.GetSoundsByCategory(Sounds,menuItem.Category);
 
-        private void soundGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-
+            backButton.Visibility = Visibility.Visible;
         }
     }
 }
